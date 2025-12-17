@@ -63,45 +63,134 @@ Har push ke baad Vercel automatically build + deploy karega
 Tumhe manually kuch nahi karna
 --------------------------------------------------------------------
 
-
 ## Notes 
-# Step 1: GitHub Actions ka basic idea
-Purpose: Tumhare code ko automatically build + test + deploy karna jab bhi push hota hai
+## Interview ke liye BAS yahi yaad rakho
+# 1 GitHub Actions kya hai
+GitHub ka built-in tool jo CI/CD automate karta hai
 
-Example: Tum main branch me code push karte ho → GitHub Actions automatically run hota hai → project build hota hai → errors dikhe to pata chal jata hai
+# 2 Pipeline ka flow
+Code push → Build → (Test) → Deploy
 
-Think of it like robot developer jo har push pe project ko check kar raha hai.
+# 3 .yml file ka role
+Saari pipeline logic .github/workflows/*.yml me hoti hai
 
-# Step 2: Workflow file create karna
+# 4 Core terms (sirf naam + meaning)
+Workflow – poori pipeline
+Job – ek kaam (build)
+Step – individual command
+Runner – VM jahan pipeline run hoti hai
 
-Location: .github/workflows/ci.yml
+# 5 Triggers
+push
+pull_request
+workflow_dispatch
 
-Purpose: Ye file batati hai GitHub Actions ko kya karna hai
+# 6 Common steps (React/Vite)
+actions/checkout
+actions/setup-node
+npm install
+npm run build
 
-Example:
-name: Vite React CI/CD        # Workflow ka naam
+# 7 interview-ready answer (rat lo)
+“I use GitHub Actions to create a CI/CD pipeline which runs on every push to main branch, installs dependencies, builds my Vite React app and can deploy it automatically.”
 
+# -----------------------------------------------------------------------
+
+## .yml file (CI file)
+root folder (project ka)
+usme ".github" nam ka folder
+usme "workflow" nam ka folder
+usem "main.yml" nam ki file
+
+# main.yml
+name: Vite React CI/CD
 on:
-  push:
-    branches: [ main ]  # main branch me push hone par chale
-  pull_request:
-    branches: [ main ]  # PR create hone par bhi chale
-
+    push: 
+        branches: [ main ]
+    pull_request:
+        branches: [ main ]
+    workflow_dispatch:
 jobs:
-  build:
-    runs-on: ubuntu-latest  # OS jahan workflow chalega
+    build:
+        runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3   # Code ko GitHub se copy kare
+        steps: 
+            - uses: actions/checkout@v3
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20'        # Node version set kare
+            - uses: actions/setup-node@v3
+              with:
+                node-version: 20
 
-      - name: Install dependencies
-        run: npm install            # npm packages install kare
+            - name: Install dependencies
+              run: npm install
 
-      - name: Build project
-        run: npm run build          # Project build kare
+            - name: Build project
+              run: npm run build
+
+# -------------------------------------------------------------------
+
+## Daily-Use Git Commands (Frontend Production)
+
+# 1 Project start / copy karna
+| Command                       | Simple use (Hindi)                           |
+| ----------------------------- | -------------------------------------------- |
+| `git init`                    | Apne system par naya git project start karna |
+| `git clone <url>`             | GitHub se project copy karna                 |
+| `git remote -v`               | Project kis GitHub repo se juda hai, dekhna  |
+| `git remote add origin <url>` | Local project ko GitHub repo se jodna        |
+
+
+# 2 Daily coding ke time (MOST USED)
+| Command               | Simple use (Hindi)                             |
+| --------------------- | ---------------------------------------------- |
+| `git status`          | Kaunsi files change hui hain, dekhna           |
+| `git add .`           | Sabhi changed files commit ke liye ready karna |
+| `git add <file>`      | Sirf ek file add karna                         |
+| `git commit -m "msg"` | Changes ko save karna                          |
+| `git push`            | Code GitHub par bhejna                         |
+| `git pull`            | GitHub se latest code lana                     |
+
+# 3 Team me kaam karte waqt (Branch use)
+| Command                            | Simple use (Hindi)                |
+| ---------------------------------- | --------------------------------- |
+| `git branch`                       | Sabhi branches dekhna             |
+| `git checkout -b feature/login`    | Nayi branch banana + switch karna |
+| `git checkout main`                | Main branch par wapas aana        |
+| `git push -u origin feature/login` | Apni branch GitHub par bhejna     |
+
+# 4 Merge & review ke time
+| Command             | Simple use (Hindi)                      |
+| ------------------- | --------------------------------------- |
+| `git merge main`    | Main branch ka code apni branch me lana |
+| `git log --oneline` | Commit history short me dekhna          |
+| `git diff`          | Changes compare karna                   |
+
+# 5 Galti ho jaye to fix karne ke commands
+| Command                 | Simple use (Hindi)          |
+| ----------------------- | --------------------------- |
+| `git restore <file>`    | File ke changes hata dena   |
+| `git reset HEAD <file>` | File ko unstage karna       |
+| `git commit --amend`    | Last commit ko change karna |
+| `git stash`             | Kaam temporarily save karna |
+
+# 6 CI/CD se related (Frontend level)
+| Command    | Simple use (Hindi)                      |
+| ---------- | --------------------------------------- |
+| `git push` | Push karte hi CI/CD pipeline chalti hai |
+
+# 7 Interview ke liye MOST IMPORTANT (yaad rakhna)
+| Command             | Kyun important     |
+| ------------------- | ------------------ |
+| `git status`        | Har kaam se pehle  |
+| `git add .`         | Commit se pehle    |
+| `git commit`        | Changes save       |
+| `git push`          | Code share + CI/CD |
+| `git pull`          | Conflict avoid     |
+| `git branch`        | Team work          |
+| `git checkout -b`   | Feature kaam       |
+| `git merge`         | Code combine       |
+| `git stash`         | Emergency save     |
+| `git log --oneline` | History            |
+
+# --------------------------------------------------------------------------------------
+
